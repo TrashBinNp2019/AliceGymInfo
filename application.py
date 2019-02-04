@@ -337,12 +337,13 @@ def get_req_sence(tokens):
                 classN = 9
             break
         
-    if max(reqSence) < 4 :
-        return answ[2]
-    else :
-        ind = reqSence.index(max(reqSence))
-        if ind == 2 :
-            token = classN * 100 + classL * 10 + weekDay
-            return "Англ. яз"#timetable.getLessonName(token, lessonN)
-        else :
-            return info[reqSence.index(max(reqSence))]
+    return reqSence.index(max(reqSence))
+#    if max(reqSence) < 4 :
+#        return answ[2]
+#    else :
+#        ind = reqSence.index(max(reqSence))
+#        if ind == 2 :
+#            token = classN * 100 + classL * 10 + weekDay
+#            return "Англ. яз"#timetable.getLessonName(token, lessonN)
+#        else :
+#            return info[reqSence.index(max(reqSence))]
