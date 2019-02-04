@@ -5,7 +5,8 @@ from __future__ import unicode_literals
 # Импортируем модули для работы с JSON и логами.
 import json
 import logging
-
+import random
+import timetable
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
 app = Flask(__name__)
@@ -14,7 +15,12 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
+# 0 - имя директора, 1 - адрес школы, 2 - название урока
 sessionStorage = {}
+quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
+answ = ["Я вас слушаю", "1+1=2", "што"]
+info = ["Лубинская Татьяна Фаиловна", "ул. Дружбы 7a"]
+questN = 1
 
 # Задаем параметры приложения Flask.
 @app.route("/", methods=['POST'])
@@ -51,54 +57,292 @@ def handle_dialog(req, res):
 
         sessionStorage[user_id] = {
             'suggests': [
-                "Не хочу.",
-                "Не буду.",
-                "Отстань!",
-            ]
+                "Хорошо", "Нет, спасибо", "Ясно", "Больше", 
+            ],
+            'quest' : 1
         }
-
-        res['response']['text'] = 'Привет! Купи слона!'
-        res['response']['buttons'] = get_suggests(user_id)
+        
+        questN = random.randint(0, 1)
+        res['response']['text'] = quest[questN]
+        res['response']['buttons'] = get_suggests(user_id, questN)
+        sessionStorage[user_id]['quest'] = questN
+    
         return
-
-    # Обрабатываем ответ пользователя.
+    
+    questN = sessionStorage[user_id]['quest']
+    
     if req['request']['original_utterance'].lower() in [
         'ладно',
-        'куплю',
-        'покупаю',
+        'давай',
         'хорошо',
+        'да',
+        'ok',
     ]:
-        # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
+        if questN == 1:
+            res['response']['text'] = get_news_header()
+        else :
+            if questN == 0 :
+                res['response']['text'] = quest[2]
+            else :
+                res['response']['text'] = answ[questN];
+        res['response']['buttons'] = get_suggests(user_id, (-1 * questN) - 1)
         return
-
-    # Если нет, то убеждаем его купить слона!
-    res['response']['text'] = 'Все говорят "%s", а ты купи слона!' % (
-        req['request']['original_utterance']
-    )
-    res['response']['buttons'] = get_suggests(user_id)
+    
+    if req['request']['original_utterance'].lower() in [
+        'еще',
+        'больше',
+    ]:
+        if questN == 1:
+            res['response']['text'] = get_news_full()
+        return
+    
+    if req['request']['original_utterance'].lower() in [
+        'no',
+        'нет',
+        'не надо',
+    ]:
+        questN = random.randint(0, 1)
+        res['response']['text'] = quest[questN]
+        res['response']['buttons'] = get_suggests(user_id, questN)
+        sessionStorage[user_id]['quest'] = questN
+        
+        return
+    
+    if req['request']['original_utterance'].lower() in [
+        'понятно',
+        'спасибо',
+        'ясно',
+    ]:
+        questN = random.randint(0, 1)
+        res['response']['text'] = quest[questN]
+        res['response']['buttons'] = get_suggests(user_id, questN)
+        sessionStorage[user_id]['quest'] = questN
+        
+        return
+        
+    res['response']['text'] = get_req_sence(req['request']['nlu']['tokens'])
 
 # Функция возвращает две подсказки для ответа.
-def get_suggests(user_id):
+def get_suggests(user_id, quest):
     session = sessionStorage[user_id]
 
-    # Выбираем две первые подсказки из массива.
-    suggests = [
-        {'title': suggest, 'hide': True}
-        for suggest in session['suggests'][:2]
-    ]
-
-    # Убираем первую подсказку, чтобы подсказки менялись каждый раз.
-    session['suggests'] = session['suggests'][1:]
+    if quest == -1 :
+        suggests = [
+            {'title': suggest, 'hide': True}
+            for suggest in session['suggests'][2:]
+        ]
+    else :
+        if quest == -2 :
+            suggests = [
+                {'title': suggest, 'hide': True}
+                for suggest in session['suggests'][2:]
+            ]
+        else :
+            if quest == 0 :
+                suggests = [
+                    {'title': suggest, 'hide': True}
+                    for suggest in session['suggests'][1]
+                ]
+            else :
+                if quest == 1 :
+                    suggests = [
+                        {'title': suggest, 'hide': True}
+                        for suggest in session['suggests'][:1]
+                    ]
+                else :
+                    suggests = [
+                        {'title': suggest, 'hide': True}
+                        for suggest in session['suggests'][:1]
+                    ]
+                
     sessionStorage[user_id] = session
 
-    # Если осталась только одна подсказка, предлагаем подсказку
-    # со ссылкой на Яндекс.Маркет.
-    if len(suggests) < 2:
-        suggests.append({
-            "title": "Ладно",
-            "url": "https://market.yandex.ru/search?text=слон",
-            "hide": True
-        })
-
     return suggests
+
+def get_news_header():
+    
+    return "20 декабря - единый день информирования"
+
+def get_news_full():
+    
+    return "Для учащихся VIII - XI классов 20 декабря в 14.20 в актовом зале гимназии пройдёт единый день информирования \"Будущее Беларуси - это мы\" в рамках программы \"ШКОЛА АКТИВНОГО ГРАЖДАНИНА\""
+
+def get_req_sence(tokens):
+    reqSence = [0, 1]
+    classN = 9
+    classL = 2
+    weekDay = 1
+    lessonN = 3
+    i = -1
+    
+    for s in tokens :
+        i = i + 1
+        
+        if s.lower() in [
+            'директор',
+            'директора',
+            'директоре',
+            'директору',
+            'директрисса',
+            'директриссу',
+            'директриссе',
+        ]:
+            reqSence[0] = reqSence[0] + 3
+            break
+
+        if s.lower() in [
+            'адрес',
+            'адреса',
+            'адресе',
+            'адресу',
+        ]:
+            reqSence[1] = reqSence[1] + 3
+            break
+        
+        if s.lower() in [
+            'урок',
+            'урока',
+            'уроку',
+            'уроке',
+        ]:
+            reqSence[2] = reqSence[2] + 3
+            break
+            
+        if s.lower() in [
+            'имя',
+            'имени',
+            'именем',
+        ]:
+            reqSence[0] = reqSence[0] + 3
+            break
+    
+        if s.lower() in [
+            'зовут',
+            'звали',
+            'звалу',
+            'звать',
+            'называть',
+            'называю',
+            'называли',
+            'называют',
+            'величать',
+            'величаю',
+            'величали',
+            'величают',
+        ]:
+            reqSence[0] = reqSence[0] + 3
+            break
+            
+        if s.lower() in [
+            'находится',
+            'находился',
+            'находятся',
+            'находиться',
+            'находился',
+            'находяться',
+            'расположена',
+            'распологается',
+            'распологалась',
+        ]:
+            reqSence[1] = reqSence[1] + 3
+            break
+            
+        if s.lower() in [
+            'как',
+        ]:
+            reqSence[0] = reqSence[0] + 2
+            break
+        
+        if s.lower() in [
+            'какой',
+        ]:
+            reqSence[2] = reqSence[2] + 2
+            break
+                        
+        if s.lower() in [
+            'кто',
+        ]:
+            reqSence[0] = reqSence[0] + 2
+            break
+            
+        if s.lower() in [
+            'где',
+        ]:
+            reqSence[1] = reqSence[1] + 2
+            break
+         
+        if s.lower() in [
+            '3',
+            '3-ый'
+            '3-ого'
+            '3-ом'
+            '3-ому'
+            '3ый'
+            '3ого'
+            '3ом'
+            '3ому'
+            'три'
+            'третий'
+            'третьего'
+            'третьем'
+            'третьему'
+        ]:
+            reqSence[2] = reqSence[2] + 3
+            if tokens[i + 1].lower() in [
+                'урок',
+                'урока',
+                'уроку',
+                'уроке', 
+            ] or tokens[i - 1].lower() in [
+                'урок',
+                'урока',
+                'уроку',
+                'уроке',  
+            ] :
+                lessonN = 3
+            else :
+                classN = 3
+            break         
+         
+        if s.lower() in [
+            '9',
+            '9-ый'
+            '9-ого'
+            '9-ом'
+            '9-ому'
+            '9ый'
+            '9ого'
+            '9ом'
+            '9ому'
+            'девять'
+            'девятый'
+            'девятого'
+            'девятом'
+            'девятому'
+        ]:
+            reqSence[2] = reqSence[2] + 3
+            if tokens[i + 1].lower() in [
+                'урок',
+                'урока',
+                'уроку',
+                'уроке', 
+            ] or tokens[i - 1].lower() in [
+                'урок',
+                'урока',
+                'уроку',
+                'уроке',  
+            ] :
+                lessonN = 9
+            else :
+                classN = 9
+            break
+        
+    if max(reqSence) < 4 :
+        return answ[2]
+    else :
+        ind = reqSence.index(max(reqSence))
+        if ind == 2 :
+            token = classN * 100 + classL * 10 + weekDay
+            return timetable.getLessonName(token, lessonN)
+        else :
+            return info[reqSence.index(max(reqSence))]
