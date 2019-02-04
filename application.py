@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import json
 import logging
 import random
-import timetable
+#import timetable
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
 app = Flask(__name__)
@@ -343,6 +343,6 @@ def get_req_sence(tokens):
         ind = reqSence.index(max(reqSence))
         if ind == 2 :
             token = classN * 100 + classL * 10 + weekDay
-            return timetable.getLessonName(token, lessonN)
+            return "Англ. яз"#timetable.getLessonName(token, lessonN)
         else :
             return info[reqSence.index(max(reqSence))]
