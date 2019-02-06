@@ -337,7 +337,7 @@ def get_req_sence(tokens):
                 classN = 9
             continue
         
-    return reqSence.index(max(reqSence))
+#    return reqSence.index(max(reqSence))
     if max(reqSence) < 4 :
         return answ[2]
     else :
