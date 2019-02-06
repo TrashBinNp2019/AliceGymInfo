@@ -288,12 +288,12 @@ def get_req_sence(tokens):
             'третьему'
         ]:
             reqSence[2] = reqSence[2] + 3
-            if tokens[i + 1].lower() in [
+            if i < len(tokens) and tokens[i + 1].lower() in [
                 'урок',
                 'урока',
                 'уроку',
                 'уроке', 
-            ] or tokens[i - 1].lower() in [
+            ] or i > 0 and tokens[i - 1].lower() in [
                 'урок',
                 'урока',
                 'уроку',
@@ -321,12 +321,12 @@ def get_req_sence(tokens):
             'девятому'
         ]:
             reqSence[2] = reqSence[2] + 3
-            if tokens[i + 1].lower() in [
+            if i < len(tokens) and tokens[i + 1].lower() in [
                 'урок',
                 'урока',
                 'уроку',
                 'уроке', 
-            ] or tokens[i - 1].lower() in [
+            ] or i > 0 and tokens[i - 1].lower() in [
                 'урок',
                 'урока',
                 'уроку',
