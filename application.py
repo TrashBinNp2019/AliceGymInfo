@@ -271,71 +271,71 @@ def get_req_sence(tokens):
             reqSence[1] = reqSence[1] + 2
             continue
          
-        if s.lower() in [
-            '3',
-            '3-ый'
-            '3-ого'
-            '3-ом'
-            '3-ому'
-            '3ый'
-            '3ого'
-            '3ом'
-            '3ому'
-            'три'
-            'третий'
-            'третьего'
-            'третьем'
-            'третьему'
-        ]:
-            reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке', 
-            ] or i > 0 and tokens[i - 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке',  
-            ] :
-                lessonN = 3
-            else :
-                classN = 3
-            continue         
-         
-        if s.lower() in [
-            '9',
-            '9-ый'
-            '9-ого'
-            '9-ом'
-            '9-ому'
-            '9ый'
-            '9ого'
-            '9ом'
-            '9ому'
-            'девять'
-            'девятый'
-            'девятого'
-            'девятом'
-            'девятому'
-        ]:
-            reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке', 
-            ] or i > 0 and tokens[i - 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке',  
-            ] :
-                lessonN = 9
-            else :
-                classN = 9
-            continue
+#        if s.lower() in [
+#            '3',
+#            '3-ый'
+#            '3-ого'
+#            '3-ом'
+#            '3-ому'
+#            '3ый'
+#            '3ого'
+#            '3ом'
+#            '3ому'
+#            'три'
+#            'третий'
+#            'третьего'
+#            'третьем'
+#            'третьему'
+#        ]:
+#            reqSence[2] = reqSence[2] + 3
+#            if i < len(tokens) and tokens[i + 1].lower() in [
+#                'урок',
+#                'урока',
+#                'уроку',
+#                'уроке', 
+#            ] or i > 0 and tokens[i - 1].lower() in [
+#                'урок',
+#                'урока',
+#                'уроку',
+#                'уроке',  
+#            ] :
+#                lessonN = 3
+#            else :
+#                classN = 3
+#            continue         
+#         
+#        if s.lower() in [
+#            '9',
+#            '9-ый'
+#            '9-ого'
+#            '9-ом'
+#            '9-ому'
+#            '9ый'
+#            '9ого'
+#            '9ом'
+#            '9ому'
+#            'девять'
+#            'девятый'
+#            'девятого'
+#            'девятом'
+#            'девятому'
+#        ]:
+#            reqSence[2] = reqSence[2] + 3
+#            if i < len(tokens) and tokens[i + 1].lower() in [
+#                'урок',
+#                'урока',
+#                'уроку',
+#                'уроке', 
+#            ] or i > 0 and tokens[i - 1].lower() in [
+#                'урок',
+#                'урока',
+#                'уроку',
+#                'уроке',  
+#            ] :
+#                lessonN = 9
+#            else :
+#                classN = 9
+#            continue
         
 #    return reqSence.index(max(reqSence))
     if max(reqSence) < 4 :
