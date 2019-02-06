@@ -188,7 +188,7 @@ def get_req_sence(tokens):
             'директриссе',
         ]:
             reqSence[0] = reqSence[0] + 3
-            break
+            continue
 
         if s.lower() in [
             'адрес',
@@ -197,7 +197,7 @@ def get_req_sence(tokens):
             'адресу',
         ]:
             reqSence[1] = reqSence[1] + 3
-            break
+            continue
         
         if s.lower() in [
             'урок',
@@ -206,7 +206,7 @@ def get_req_sence(tokens):
             'уроке',
         ]:
             reqSence[2] = reqSence[2] + 3
-            break
+            continue
             
         if s.lower() in [
             'имя',
@@ -214,7 +214,7 @@ def get_req_sence(tokens):
             'именем',
         ]:
             reqSence[0] = reqSence[0] + 3
-            break
+            continue
     
         if s.lower() in [
             'зовут',
@@ -231,7 +231,7 @@ def get_req_sence(tokens):
             'величают',
         ]:
             reqSence[0] = reqSence[0] + 3
-            break
+            continue
             
         if s.lower() in [
             'находится',
@@ -245,31 +245,31 @@ def get_req_sence(tokens):
             'распологалась',
         ]:
             reqSence[1] = reqSence[1] + 3
-            break
+            continue
             
         if s.lower() in [
             'как',
         ]:
             reqSence[0] = reqSence[0] + 2
-            break
+            continue
         
         if s.lower() in [
             'какой',
         ]:
             reqSence[2] = reqSence[2] + 2
-            break
+            continue
                         
         if s.lower() in [
             'кто',
         ]:
             reqSence[0] = reqSence[0] + 2
-            break
+            continue
             
         if s.lower() in [
             'где',
         ]:
             reqSence[1] = reqSence[1] + 2
-            break
+            continue
          
         if s.lower() in [
             '3',
@@ -302,7 +302,7 @@ def get_req_sence(tokens):
                 lessonN = 3
             else :
                 classN = 3
-            break         
+            continue         
          
         if s.lower() in [
             '9',
@@ -335,7 +335,7 @@ def get_req_sence(tokens):
                 lessonN = 9
             else :
                 classN = 9
-            break
+            continue
         
 #    return reqSence.index(max(reqSence))
     if max(reqSence) < 4 :
