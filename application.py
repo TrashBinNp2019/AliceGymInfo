@@ -343,7 +343,7 @@ def get_req_sence(tokens):
     else :
         ind = reqSence.index(max(reqSence))
         if ind == 2 :
-            token = classN * 100 + classL * 10 + weekDay
-            return "Англ. яз"#timetable.getLessonName(token, lessonN)
+#            token = classN * 100 + classL * 10 + weekDay
+            return 'Англ. яз'#timetable.getLessonName(token, lessonN)
         else :
             return info[reqSence.index(max(reqSence))]
