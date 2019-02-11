@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import json
 import logging
 import random
-#import timetable
+import timetable
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
 app = Flask(__name__)
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.DEBUG)
 # 0 - имя директора, 1 - адрес школы, 2 - название урока
 sessionStorage = {}
 quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
-answ = ["Я вас слушаю", "1+1=2", "што"]
+answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
 info = ["Лубинская Татьяна Фаиловна", "ул. Дружбы 7a"]
 questN = 1
 
@@ -64,8 +64,19 @@ def handle_dialog(req, res):
         
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
+        res['response']['tts'] = quest[questN]
         res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
+    
+        return
+    
+    if req['request']['original_utterance'].lower() in [
+        'Помощь',
+        'Что ты умеешь'
+    ]:
+
+        res['response']['text'] = 'Я могу' #TODO
+        res['response']['tts'] = 'Я могу'
     
         return
     
@@ -80,11 +91,14 @@ def handle_dialog(req, res):
     ]:
         if questN == 1:
             res['response']['text'] = get_news_header()
+            res['response']['tts'] = get_news_header()
         else :
             if questN == 0 :
                 res['response']['text'] = quest[2]
+                res['response']['tts'] = quest[2]
             else :
                 res['response']['text'] = answ[questN];
+                res['response']['tts'] = answ[questN];
         res['response']['buttons'] = get_suggests(user_id, (-1 * questN) - 1)
         return
     
@@ -94,6 +108,7 @@ def handle_dialog(req, res):
     ]:
         if questN == 1:
             res['response']['text'] = get_news_full()
+            res['response']['tts'] = get_news_full()
         return
     
     if req['request']['original_utterance'].lower() in [
@@ -103,6 +118,7 @@ def handle_dialog(req, res):
     ]:
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
+        res['response']['tts'] = quest[questN]
         res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
         
@@ -115,12 +131,14 @@ def handle_dialog(req, res):
     ]:
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
+        res['response']['tts'] = quest[questN]
         res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
         
         return
         
     res['response']['text'] = get_req_sence(req['request']['nlu']['tokens'])
+    res['response']['tts'] = get_req_sence(req['request']['nlu']['tokens'])
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id, quest):
