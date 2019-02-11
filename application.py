@@ -64,7 +64,7 @@ def handle_dialog(req, res):
         
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
-        res['response']['tts'] = quest[questN]
+#        res['response']['tts'] = quest[questN]
         res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
     
