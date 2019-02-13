@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import json
 import logging
 import random
-import timetable
+#import timetable
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
 app = Flask(__name__)
