@@ -62,17 +62,15 @@ def handle_dialog(req, res):
             'quest' : 1
         }
         
-        questN = random.randint(0, 1)
-        res['response']['text'] = quest[questN]
-        res['response']['tts'] = quest[questN]
-        res['response']['buttons'] = get_suggests(user_id, questN)
-        sessionStorage[user_id]['quest'] = questN
+        res['response']['text'] = "Здравствуйте. Я - голосовой помощник для учеников и гостей Гимназии № 2 г. Новополоцка"
+        res['response']['tts'] = "Здравствуйте. Я - голосовой помощник для учеников и гостей Гимназии № 2 г. Новополоцка"
     
         return
     
     if req['request']['original_utterance'].lower() in [
         'помощь',
-        'что ты умеешь'
+        'что ты умеешь',
+        'что ты умеешь?',
     ]:
 
         res['response']['text'] = 'Я могу рассказать вам о школе : пока только её адрес и имя директора. Еще могу почитать новости, но только одну. Задавайте ваши вопросы, а я постараюсь ответить)' #TODO
