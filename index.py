@@ -185,7 +185,7 @@ def get_news_full():
     return "Для учащихся VIII - XI классов 20 декабря в 14.20 в актовом зале гимназии пройдёт единый день информирования \"Будущее Беларуси - это мы\" в рамках программы \"ШКОЛА АКТИВНОГО ГРАЖДАНИНА\""
 
 def get_req_sence(tokens):
-    reqSence = [0, 0, 0]
+    reqSence = [0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = 1
@@ -373,7 +373,6 @@ def get_req_sence(tokens):
             return 'Англ. яз'#timetable.getLessonName(token, lessonN)
         else :
             if ind == 3 :
-                questN = 1
                 return get_news_header()
             else :
                 return info[reqSence.index(max(reqSence))]
