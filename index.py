@@ -373,7 +373,6 @@ def get_req_sence(tokens):
             return 'Англ. яз'#timetable.getLessonName(token, lessonN)
         else :
             if ind == 3 :
-                sessionStorage[user_id]['quest'] = 1
                 return get_news_header()
             else :
                 return info[reqSence.index(max(reqSence))]
