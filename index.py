@@ -15,7 +15,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
-# 0 - имя директора, 1 - адрес школы, 2 - название урока
+# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости
 sessionStorage = {}
 quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
 answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
@@ -135,8 +135,9 @@ def handle_dialog(req, res):
         
         return
         
-    res['response']['text'] = get_req_sence(req['request']['nlu']['tokens'])
-    res['response']['tts'] = get_req_sence(req['request']['nlu']['tokens'])
+    answ = get_req_sence(req['request']['nlu']['tokens'])
+    res['response']['text'] = answ
+    res['response']['tts'] = answ
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id, quest):
@@ -230,6 +231,15 @@ def get_req_sence(tokens):
             'именем',
         ]:
             reqSence[0] = reqSence[0] + 3
+            continue
+        
+        if s.lower() in [
+            'новости',
+            'новостей',
+            'новостях',
+            'новостям',
+        ]:
+            reqSence[3] = reqSence[3] + 5
             continue
     
         if s.lower() in [
@@ -362,4 +372,8 @@ def get_req_sence(tokens):
             token = classN * 100 + classL * 10 + weekDay
             return 'Англ. яз'#timetable.getLessonName(token, lessonN)
         else :
-            return info[reqSence.index(max(reqSence))]
+            if ind == 3 :
+                questN = 1
+                return get_news_header()
+            else :
+                return info[reqSence.index(max(reqSence))]
