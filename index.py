@@ -184,7 +184,8 @@ def get_news_full():
     
     return "Для учащихся VIII - XI классов 20 декабря в 14.20 в актовом зале гимназии пройдёт единый день информирования \"Будущее Беларуси - это мы\" в рамках программы \"ШКОЛА АКТИВНОГО ГРАЖДАНИНА\""
 
-def get_req_sence(tokens):
+def get_req_sence(tokens_or):
+    tokens = tokens_or
     reqSence = [0, 0, 0, 0]
     classN = 9
     classL = 2
@@ -319,15 +320,19 @@ def get_req_sence(tokens):
                 'урока',
                 'уроку',
                 'уроке', 
-            ] or i > 0 and tokens[i - 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке',  
             ] :
                 lessonN = 3
+                tokens[i + 1] = '!!!'
             else :
-                classN = 3
+                if i > 0 and tokens[i - 1].lower() in [
+                    'урок',
+                    'урока',
+                    'уроку',
+                    'уроке',  
+                ] :
+                    lessonN = 3
+                else :
+                    classN = 3
             continue         
          
         if s.lower() in [
@@ -352,15 +357,19 @@ def get_req_sence(tokens):
                 'урока',
                 'уроку',
                 'уроке', 
-            ] or i > 0 and tokens[i - 1].lower() in [
-                'урок',
-                'урока',
-                'уроку',
-                'уроке',  
             ] :
                 lessonN = 9
+                tokens[i + 1] = '!!!'
             else :
-                classN = 9
+                if i > 0 and tokens[i - 1].lower() in [
+                    'урок',
+                    'урока',
+                    'уроку',
+                    'уроке',  
+                ] :
+                    lessonN = 9
+                else :
+                    classN = 9
             continue
         
 #    return reqSence.index(max(reqSence))
