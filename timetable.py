@@ -1,7 +1,7 @@
 from time import gmtime, strftime
 
 lessons = {}
-lessons[912] = {
+lessons[921] = {
     'names': [
         "бел. яз", "физич. культ", "русск. яз", "англ. яз", "матем.", "химия", "биология",
     ],
