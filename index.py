@@ -7,6 +7,8 @@ import json
 import logging
 import random
 import timetable
+import datetime
+
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
 app = Flask(__name__)
@@ -189,7 +191,7 @@ def get_req_sence(tokens_or):
     reqSence = [0, 0, 0, 0]
     classN = 9
     classL = 2
-    weekDay = 1
+    weekDay = datetime.datetime.today().weekday()
     lessonN = 3
     i = -1
     
@@ -239,7 +241,83 @@ def get_req_sence(tokens_or):
         if s.startswith('где') :
             reqSence[1] = reqSence[1] + 2
             continue
+
+        if s.startswith('понедел') :
+            weekday = 0
+            continue
+
+        if s.startswith('вторн') :
+            weekday = 1
+            continue
+
+        if s.startswith('сред') :
+            weekday = 2
+            continue
+
+        if s.startswith('четвер') :
+            weekday = 3
+            continue
+
+        if s.startswith('пятниц') :
+            weekday = 4
+            continue
+
+        if s.startswith('суббот') :
+            weekday = 5
+            continue
+
+        if s.startswith('воскресен') :
+            weekday = 6
+            continue
+        
+        if s.startswith('позавчера') :
+            weekday = datetime.datetime.today().weekday() - 2
+            if weekday < 0: weekday = weekday + 6
+            continue
          
+        if s.startswith('вчера') :
+            weekday = datetime.datetime.today().weekday() - 1
+            if weekday < 0: weekday = weekday + 6
+            continue
+       
+        if s.startswith('сегодня') :
+            weekday = datetime.datetime.today().weekday()
+            continue
+        
+        if s.startswith('завтра') :
+            weekday = datetime.datetime.today().weekday() + 1
+            if weekday > 6 : weekday = weekday - 6
+            continue
+        
+        if s.startswith('послезавтра') :
+            weekday = datetime.datetime.today().weekday() + 2
+            if weekday > 6 : weekday = weekday - 6
+            continue   
+        
+        if s.startswith('1') or s.startswith('перв'):
+            reqSence[2] = reqSence[2] + 3
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+                lessonN = 1
+                tokens[i + 1] = '!!!'
+            else :
+                if i > 0 and tokens[i - 1].startswith('урок') :
+                    lessonN = 1
+                else :
+                    classN = 1
+            continue         
+        
+        if s.startswith('2') or s.startswith('два') or s.startswith('втор') :
+            reqSence[2] = reqSence[2] + 3
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+                lessonN = 2
+                tokens[i + 1] = '!!!'
+            else :
+                if i > 0 and tokens[i - 1].startswith('урок') :
+                    lessonN = 2
+                else :
+                    classN = 2
+            continue         
+                     
         if s.startswith('3') or s.startswith('три') or s.startswith('трет') :
             reqSence[2] = reqSence[2] + 3
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
@@ -252,6 +330,18 @@ def get_req_sence(tokens_or):
                     classN = 3
             continue         
          
+        if s.startswith('4') or s.startswith('четыр') or s.startswith('четверт') :
+            reqSence[2] = reqSence[2] + 3
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+                lessonN = 4
+                tokens[i + 1] = '!!!'
+            else :
+                if i > 0 and tokens[i - 1].startswith('урок') :
+                    lessonN = 4
+                else :
+                    classN = 4
+            continue         
+          
         if s.startswith('9') or s.startswith('девят') :
             reqSence[2] = reqSence[2] + 3
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
