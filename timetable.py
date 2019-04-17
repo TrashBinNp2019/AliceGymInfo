@@ -27,7 +27,7 @@ lessonTime  = {
 
 def get_lesson_name(token, n):
     
-    return lessons[token]['names'][n - 1]
+    return n#lessons[token]['names'][n - 1]
 
 def get_lesson_classroom(token, n):
     
