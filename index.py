@@ -196,105 +196,47 @@ def get_req_sence(tokens_or):
     for s in tokens :
         i = i + 1
         
-        if s.lower() in [
-            'директор',
-            'директора',
-            'директоре',
-            'директору',
-            'директрисса',
-            'директриссу',
-            'директриссе',
-        ]:
+        if s.startswith('директор') or s.startswith('директри') :
             reqSence[0] = reqSence[0] + 3
             continue
 
-        if s.lower() in [
-            'адрес',
-            'адреса',
-            'адресе',
-            'адресу',
-        ]:
+        if s.startswith('адрес') :
             reqSence[1] = reqSence[1] + 3
             continue
         
-        if s.lower() in [
-            'урок',
-            'урока',
-            'уроку',
-            'уроке',
-        ]:
+        if s.startswith('урок') :
             reqSence[2] = reqSence[2] + 3
             continue
             
-        if s.lower() in [
-            'имя',
-            'имени',
-            'именем',
-        ]:
+        if s.startswith('имя') :
             reqSence[0] = reqSence[0] + 3
             continue
         
-        if s.lower() in [
-            'новости',
-            'новостей',
-            'новостях',
-            'новостям',
-        ]:
+        if s.startswith('новост') :
             reqSence[3] = reqSence[3] + 5
             continue
     
-        if s.lower() in [
-            'зовут',
-            'звали',
-            'звалу',
-            'звать',
-            'называть',
-            'называю',
-            'называли',
-            'называют',
-            'величать',
-            'величаю',
-            'величали',
-            'величают',
-        ]:
+        if s.startswith('зов') or s.startswith('зва') or s.startswith('называ') or s.startswith('велича') :
             reqSence[0] = reqSence[0] + 3
             continue
             
-        if s.lower() in [
-            'находится',
-            'находился',
-            'находятся',
-            'находиться',
-            'находился',
-            'находяться',
-            'расположена',
-            'распологается',
-            'распологалась',
-        ]:
+        if s.startswith('находит') or s.startswith('находят') or s.startswith('располо'):
             reqSence[1] = reqSence[1] + 3
             continue
             
-        if s.lower() in [
-            'как',
-        ]:
+        if s.startswith('как') :
             reqSence[0] = reqSence[0] + 2
             continue
         
-        if s.lower() in [
-            'какой',
-        ]:
+        if s.startswith('какой') :
             reqSence[2] = reqSence[2] + 2
             continue
                         
-        if s.lower() in [
-            'кто',
-        ]:
+        if s.startswith('кто') :
             reqSence[0] = reqSence[0] + 2
             continue
             
-        if s.lower() in [
-            'где',
-        ]:
+        if s.startswith('где') :
             reqSence[1] = reqSence[1] + 2
             continue
          
