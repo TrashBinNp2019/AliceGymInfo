@@ -230,20 +230,30 @@ def get_req_sence(tokens_or):
             reqSence[0] = reqSence[0] + 2
             continue
         
+        if s.startswith('кабинет') :
+            reqSence[4] = reqSence[4] + 3
+            continue
+
         if s.startswith('класс') :
             reqSence[4] = reqSence[4] + 3
             continue
 
         if s.startswith('какой') :
+            reqSence[4] = reqSence[4] + 2
             reqSence[2] = reqSence[2] + 2
             continue
                         
+        if s.startswith('какие') :
+            reqSence[3] = reqSence[3] + 2
+            continue
+
         if s.startswith('кто') :
             reqSence[0] = reqSence[0] + 2
             continue
             
         if s.startswith('где') :
             reqSence[1] = reqSence[1] + 2
+            reqSence[4] = reqSence[4] + 2
             continue
 
         if s.startswith('понедел') :
