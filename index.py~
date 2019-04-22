@@ -371,6 +371,6 @@ def get_req_sence(tokens_or):
                 return get_news_header()
             else:
                 if ind == 4 :
-                    return timetable.get_lesson_classroom(token, lessonN)
+                   return get_news_header()
                 else :
                     return info[reqSence.index(max(reqSence))]
