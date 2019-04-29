@@ -243,6 +243,10 @@ def get_req_sence(tokens_or):
             reqSence[2] = reqSence[2] + 2
             continue
                         
+        if s.startswith('каком') :
+            reqSence[4] = reqSence[4] + 2
+            continue
+
         if s.startswith('какие') :
             reqSence[3] = reqSence[3] + 2
             continue
@@ -252,7 +256,7 @@ def get_req_sence(tokens_or):
             continue
             
         if s.startswith('где') :
-            reqSence[1] = reqSence[1] + 2
+            reqSence[1] = reqSence[1] + 3
             reqSence[4] = reqSence[4] + 2
             continue
 
@@ -310,6 +314,8 @@ def get_req_sence(tokens_or):
         
         if s.startswith('1') or s.startswith('перв'):
             reqSence[2] = reqSence[2] + 3
+            reqSence[4] = reqSence[4] + 3           
+
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 1
                 tokens[i + 1] = '!!!'
@@ -322,7 +328,9 @@ def get_req_sence(tokens_or):
         
         if s.startswith('2') or s.startswith('два') or s.startswith('втор') :
             reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            reqSence[4] = reqSence[4] + 3           
+
+           if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 2
                 tokens[i + 1] = '!!!'
             else :
@@ -334,7 +342,9 @@ def get_req_sence(tokens_or):
                      
         if s.startswith('3') or s.startswith('три') or s.startswith('трет') :
             reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            reqSence[4] = reqSence[4] + 3           
+
+           if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 3
                 tokens[i + 1] = '!!!'
             else :
@@ -346,7 +356,9 @@ def get_req_sence(tokens_or):
         
         if s.startswith('4') or s.startswith('четыр') or s.startswith('четверт') :
             reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            reqSence[4] = reqSence[4] + 3           
+
+           if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 4
                 tokens[i + 1] = '!!!'
             else :
@@ -358,7 +370,9 @@ def get_req_sence(tokens_or):
           
         if s.startswith('9') or s.startswith('девят') :
             reqSence[2] = reqSence[2] + 3
-            if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            reqSence[4] = reqSence[4] + 3           
+
+           if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 9
                 tokens[i + 1] = '!!!'
             else :
