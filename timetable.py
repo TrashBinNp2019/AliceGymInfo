@@ -3,7 +3,7 @@ from time import gmtime, strftime
 lessons = {}
 lessons[920] = {
     'names': [
-        "бел. яз", "физич. культ", "русск. яз", "англ. яз", "матем.", "химия", "биология",
+        "белоруский язык", "физическая культура", "русский язык", "английский язык", "математика", "химия", "биология",
     ],
     'classrooms': [
         "412", "большой зал", "208", "308.309", "405", "314", "306",
@@ -24,6 +24,26 @@ lessonTime  = {
         555, 610, 670, 730, 790, 850, 905, 965,
     ],
 }
+
+def name_to_n_lesson(name, token):
+    
+    i = 0
+    for s in lessons[token]['names'] :
+        if s.startswith(name[:3]) :
+            return i
+        i = i + 1
+    return -1
+
+
+def name_to_n_lesson_add(name, nameAdd, token):
+    
+    i = 0
+    for s in lessons[token]['names'] :
+        sArr = s.split()
+        if len(sArr) > 1 and sArr[0].startswith(name[:3]) and sArr[1].startswith(nameAdd[:3]) :
+            return i
+        i = i + 1
+    return -1
 
 def get_lesson_name(token, n):
     

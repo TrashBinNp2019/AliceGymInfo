@@ -186,6 +186,16 @@ def get_news_full():
     
     return "Для учащихся VIII - XI классов 20 декабря в 14.20 в актовом зале гимназии пройдёт единый день информирования \"Будущее Беларуси - это мы\" в рамках программы \"ШКОЛА АКТИВНОГО ГРАЖДАНИНА\""
 
+def resolve_lessonn(lBuf, lBufAdd, token):
+
+    if lBuf != "!!!" :
+        if lBufAdd != "!!!" :
+            return name_to_lesson_add(lBuf, lBufAdd, token)
+        else :
+            return name_to_lesson(lBuf, token) 
+    else :
+        return -1
+
 def get_req_sence(tokens_or):
     tokens = tokens_or
     reqSence = [0, 0, 0, 0, 0]
@@ -193,6 +203,8 @@ def get_req_sence(tokens_or):
     classL = 2
     weekDay = datetime.datetime.today().weekday()
     lessonN = 3
+    lessonBuf = "!!!"
+    lessonBufAdd = "!!!"
     i = -1
     
     for s in tokens :
@@ -311,10 +323,22 @@ def get_req_sence(tokens_or):
             weekday = datetime.datetime.today().weekday() + 2
             if weekday > 6 : weekday = weekday - 6
             continue   
+                      
+        if s.startswith('физ') or s.startswith('англ') or s.startswith('рус') or s.startswith('бел') or s.startswith('матем')  or s.startswith('хим') or s.startswith('биол') :
+            reqSence[4] = reqSence[4] + 2           
+
+            lessonBuf = s                
+            continue         
+ 
+        if s.startswith('язы') or s.startswith('литерат') :
+            reqSence[4] = reqSence[4] + 2           
+
+            lessonBufAdd = s                
+            continue                
         
         if s.startswith('1') or s.startswith('перв'):
-            reqSence[2] = reqSence[2] + 3
-            reqSence[4] = reqSence[4] + 3           
+            reqSence[2] = reqSence[2] + 2
+            reqSence[4] = reqSence[4] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 1
@@ -327,8 +351,8 @@ def get_req_sence(tokens_or):
             continue         
         
         if s.startswith('2') or s.startswith('два') or s.startswith('втор') :
-            reqSence[2] = reqSence[2] + 3
-            reqSence[4] = reqSence[4] + 3           
+            reqSence[2] = reqSence[2] + 2
+            reqSence[4] = reqSence[4] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 2
@@ -341,8 +365,8 @@ def get_req_sence(tokens_or):
             continue         
                      
         if s.startswith('3') or s.startswith('три') or s.startswith('трет') :
-            reqSence[2] = reqSence[2] + 3
-            reqSence[4] = reqSence[4] + 3           
+            reqSence[2] = reqSence[2] + 2
+            reqSence[4] = reqSence[4] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 3
@@ -355,8 +379,8 @@ def get_req_sence(tokens_or):
             continue         
         
         if s.startswith('4') or s.startswith('четыр') or s.startswith('четверт') :
-            reqSence[2] = reqSence[2] + 3
-            reqSence[4] = reqSence[4] + 3           
+            reqSence[2] = reqSence[2] + 2
+            reqSence[4] = reqSence[4] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 4
@@ -369,8 +393,8 @@ def get_req_sence(tokens_or):
             continue         
           
         if s.startswith('9') or s.startswith('девят') :
-            reqSence[2] = reqSence[2] + 3
-            reqSence[4] = reqSence[4] + 3           
+            reqSence[2] = reqSence[2] + 2
+            reqSence[4] = reqSence[4] + 2          
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 9
@@ -387,9 +411,13 @@ def get_req_sence(tokens_or):
         return answ[2]
     else :
         token = classN * 100 + classL * 10 + weekDay
+        lessonN = resolve_lessonn(lessonBuf, lessonBufAdd, token) 
         ind = reqSence.index(max(reqSence))
         if ind == 2 :
-           return timetable.get_lesson_name(token, lessonN)
+            if lessonN != -1 :
+                return timetable.get_lesson_name(token, lessonN)
+            else :
+                return answ[2]
         else :
             if ind == 3 :
                 return get_news_header()
