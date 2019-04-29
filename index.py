@@ -330,7 +330,7 @@ def get_req_sence(tokens_or):
             reqSence[2] = reqSence[2] + 3
             reqSence[4] = reqSence[4] + 3           
 
-           if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 2
                 tokens[i + 1] = '!!!'
             else :
@@ -344,7 +344,7 @@ def get_req_sence(tokens_or):
             reqSence[2] = reqSence[2] + 3
             reqSence[4] = reqSence[4] + 3           
 
-           if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 3
                 tokens[i + 1] = '!!!'
             else :
@@ -358,7 +358,7 @@ def get_req_sence(tokens_or):
             reqSence[2] = reqSence[2] + 3
             reqSence[4] = reqSence[4] + 3           
 
-           if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 4
                 tokens[i + 1] = '!!!'
             else :
@@ -372,7 +372,7 @@ def get_req_sence(tokens_or):
             reqSence[2] = reqSence[2] + 3
             reqSence[4] = reqSence[4] + 3           
 
-           if i < len(tokens) and tokens[i + 1].startswith('урок') :
+            if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 9
                 tokens[i + 1] = '!!!'
             else :
