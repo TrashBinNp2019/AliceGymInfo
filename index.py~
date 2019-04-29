@@ -186,6 +186,16 @@ def get_news_full():
     
     return "Для учащихся VIII - XI классов 20 декабря в 14.20 в актовом зале гимназии пройдёт единый день информирования \"Будущее Беларуси - это мы\" в рамках программы \"ШКОЛА АКТИВНОГО ГРАЖДАНИНА\""
 
+def resolve_lessonn(lBuf, lBufAdd, token):
+
+    if lBuf != "!!!" :
+        if lBufAdd != "!!!" :
+            return name_to_lesson_add(lBuf, lBufAdd, token)
+        else :
+            return name_to_lesson(lBuf, token) 
+    else :
+        return -1
+
 def get_req_sence(tokens_or):
     tokens = tokens_or
     reqSence = [0, 0, 0, 0, 0]
@@ -193,8 +203,8 @@ def get_req_sence(tokens_or):
     classL = 2
     weekDay = datetime.datetime.today().weekday()
     lessonN = 3
-    lessonBuf = ""
-    lessonBufAdd = ""
+    lessonBuf = "!!!"
+    lessonBufAdd = "!!!"
     i = -1
     
     for s in tokens :
@@ -314,7 +324,7 @@ def get_req_sence(tokens_or):
             if weekday > 6 : weekday = weekday - 6
             continue   
                       
-        if s.startswith('русск') :
+        if s.startswith('физ') or s.startswith('англ') or s.startswith('рус') or s.startswith('бел') or s.startswith('матем')  or s.startswith('хим') or s.startswith('биол') :
             reqSence[4] = reqSence[4] + 2           
 
             lessonBuf = s                
@@ -401,9 +411,13 @@ def get_req_sence(tokens_or):
         return answ[2]
     else :
         token = classN * 100 + classL * 10 + weekDay
+        lessonN = resolve_lessonn(lessonBuf, lessonBufAdd, token) 
         ind = reqSence.index(max(reqSence))
         if ind == 2 :
-           return timetable.get_lesson_name(token, lessonN)
+            if lessonN != -1 :
+                return timetable.get_lesson_name(token, lessonN)
+            else :
+                return answ[2]
         else :
             if ind == 3 :
                 return get_news_header()
