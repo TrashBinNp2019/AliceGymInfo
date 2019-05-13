@@ -190,9 +190,9 @@ def resolve_lessonn(lBuf, lBufAdd, token):
 
     if lBuf != "!!!" :
         if lBufAdd != "!!!" :
-            return timetable.name_to_lesson_add(lBuf, lBufAdd, token)
+            return timetable.name_to_n_lesson_add(lBuf, lBufAdd, token)
         else :
-            return timetable.name_to_lesson(lBuf, token) 
+            return timetable.name_to_n_lesson(lBuf, token) 
     else :
         return -1
 
