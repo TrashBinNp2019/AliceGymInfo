@@ -139,7 +139,7 @@ def handle_dialog(req, res):
         res['response']['text'] = answ
         res['response']['tts'] = answ
     else : 
-        ans = 
+        ans = str(int(strftime('%H', gmtime())) + 3) + ' часов, ' + strftime('%M', gmtime()) + ' минут'
         res['response']['text'] = ans
         res['response']['tts'] = ans
 
