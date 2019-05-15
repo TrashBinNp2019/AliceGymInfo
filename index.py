@@ -17,7 +17,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
-# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока, 5 - время начала, 6 - время конца
+# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока, 5 - время начала, 6 - время конца, 7 - сколька время
 sessionStorage = {}
 quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
 answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
@@ -99,7 +99,6 @@ def handle_dialog(req, res):
             else :
                 res['response']['text'] = answ[questN];
                 res['response']['tts'] = answ[questN];
-        res['response']['buttons'] = get_suggests(user_id, (-1 * questN) - 1)
         return
     
     if req['request']['original_utterance'].lower() in [
@@ -119,7 +118,6 @@ def handle_dialog(req, res):
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
         res['response']['tts'] = quest[questN]
-        res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
         
         return
@@ -132,51 +130,55 @@ def handle_dialog(req, res):
         questN = random.randint(0, 1)
         res['response']['text'] = quest[questN]
         res['response']['tts'] = quest[questN]
-        res['response']['buttons'] = get_suggests(user_id, questN)
         sessionStorage[user_id]['quest'] = questN
         
         return
         
     answ = get_req_sence(req['request']['nlu']['tokens'])
-    res['response']['text'] = answ
-    res['response']['tts'] = answ
+    if answ != 'time' :
+        res['response']['text'] = answ
+        res['response']['tts'] = answ
+    else : 
+        ans = 
+        res['response']['text'] = ans
+        res['response']['tts'] = ans
 
-# Функция возвращает две подсказки для ответа.
-def get_suggests(user_id, quest):
-    session = sessionStorage[user_id]
-
-    if quest == -1 :
-        suggests = [
-            {'title': suggest, 'hide': True}
-            for suggest in session['suggests'][2:]
-        ]
-    else :
-        if quest == -2 :
-            suggests = [
-                {'title': suggest, 'hide': True}
-                for suggest in session['suggests'][2:]
-            ]
-        else :
-            if quest == 0 :
-                suggests = [
-                    {'title': suggest, 'hide': True}
-                    for suggest in session['suggests'][1]
-                ]
-            else :
-                if quest == 1 :
-                    suggests = [
-                        {'title': suggest, 'hide': True}
-                        for suggest in session['suggests'][:1]
-                    ]
-                else :
-                    suggests = [
-                        {'title': suggest, 'hide': True}
-                        for suggest in session['suggests'][:1]
-                    ]
-                
-    sessionStorage[user_id] = session
-
-    return suggests
+# Функция возвращает две подсказки для ответа. disabled
+#def get_suggests(user_id, quest):
+#    session = sessionStorage[user_id]
+#
+#    if quest == -1 :
+#        suggests = [
+#            {'title': suggest, 'hide': True}
+#            for suggest in session['suggests'][2:]
+#        ]
+#    else :
+#        if quest == -2 :
+#            suggests = [
+#                {'title': suggest, 'hide': True}
+#                for suggest in session['suggests'][2:]
+#            ]
+#        else :
+#            if quest == 0 :
+#                suggests = [
+#                    {'title': suggest, 'hide': True}
+#                    for suggest in session['suggests'][1]
+#                ]
+#            else :
+#                if quest == 1 :
+#                    suggests = [
+#                        {'title': suggest, 'hide': True}
+#                        for suggest in session['suggests'][:1]
+#                    ]
+#                else :
+#                    suggests = [
+#                        {'title': suggest, 'hide': True}
+#                        for suggest in session['suggests'][:1]
+#                    ]
+#                
+#    sessionStorage[user_id] = session
+#
+#    return suggests
 
 def get_news_header():
     
@@ -198,7 +200,7 @@ def resolve_lessonn(lBuf, lBufAdd, token):
 
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -252,6 +254,24 @@ def get_req_sence(tokens_or):
 
         if s.startswith('кончае') or s.startswith('заканч') or s.startswith('заверш') :
             reqSence[6] = reqSence[6] + 2
+            continue
+
+        if s.startswith('время') :
+            reqSence[5] = reqSence[5] + 3
+            reqSence[6] = reqSence[6] + 2
+            reqSence[7] = reqSence[7] + 2
+            continue
+
+        if s.startswith('час') :
+            reqSence[7] = reqSence[7] + 3
+            continue
+
+        if s.startswith('который') :
+            reqSence[7] = reqSence[7] + 3
+            continue
+
+        if s.startswith('сколько') :
+            reqSence[7] = reqSence[7] + 3
             continue
 
         if s.startswith('начина') :
@@ -438,7 +458,7 @@ def get_req_sence(tokens_or):
         return answ[2]
     else :
         token = classN * 100 + classL * 10 + weekDay
-        if lessonN == -1 or resolve_lessonn(lessonBuf, lessonBufAdd, token) != -1 : # should work idk (f + f = f)
+        if lessonN == -1 or resolve_lessonn(lessonBuf, lessonBufAdd, token) != -1 : # should work idk (f or f = f)
             lessonN = resolve_lessonn(lessonBuf, lessonBufAdd, token) 
         ind = reqSence.index(max(reqSence))
         if ind == 2 :
@@ -459,4 +479,7 @@ def get_req_sence(tokens_or):
                         if ind == 6 :
                             return timetable.get_lesson_end_time(token, lessonN)
                         else :
-                            return info[reqSence.index(max(reqSence))]
+                            if ind == 7 :
+                                return '!time' 
+                            else :
+                                return info[reqSence.index(max(reqSence))]
