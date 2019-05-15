@@ -17,7 +17,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
-# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока
+# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока, 5 - время урока
 sessionStorage = {}
 quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
 answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
@@ -198,7 +198,7 @@ def resolve_lessonn(lBuf, lBufAdd, token):
 
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -272,6 +272,10 @@ def get_req_sence(tokens_or):
             reqSence[4] = reqSence[4] + 2
             continue
 
+        if s.startswith('когда') :
+            reqSence[5] = reqSence[5] + 2
+            continue
+
         if s.startswith('понедел') :
             weekday = 0
             continue
@@ -326,12 +330,14 @@ def get_req_sence(tokens_or):
                       
         if s.startswith('физ') or s.startswith('англ') or s.startswith('рус') or s.startswith('бел') or s.startswith('матем')  or s.startswith('хим') or s.startswith('биол') :
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             lessonBuf = s                
             continue         
  
         if s.startswith('язы') or s.startswith('литерат') :
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             lessonBufAdd = s                
             continue                
@@ -339,6 +345,7 @@ def get_req_sence(tokens_or):
         if s.startswith('1') or s.startswith('перв'):
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 1
@@ -353,6 +360,7 @@ def get_req_sence(tokens_or):
         if s.startswith('2') or s.startswith('два') or s.startswith('втор') :
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 2
@@ -367,6 +375,7 @@ def get_req_sence(tokens_or):
         if s.startswith('3') or s.startswith('три') or s.startswith('трет') :
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 3
@@ -381,6 +390,7 @@ def get_req_sence(tokens_or):
         if s.startswith('4') or s.startswith('четыр') or s.startswith('четверт') :
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 4
@@ -395,6 +405,7 @@ def get_req_sence(tokens_or):
         if s.startswith('9') or s.startswith('девят') :
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2          
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 9
@@ -425,4 +436,7 @@ def get_req_sence(tokens_or):
                 if ind == 4 :
                     return timetable.get_lesson_classroom(token, lessonN)
                 else :
-                    return info[reqSence.index(max(reqSence))]
+                    if ind == 5 :
+                        return timetable.get_lesson_start_time(token, lessonN)
+                    else :
+                        return info[reqSence.index(max(reqSence))]

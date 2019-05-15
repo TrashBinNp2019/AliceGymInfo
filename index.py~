@@ -17,7 +17,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
-# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока
+# 0 - имя директора, 1 - адрес школы, 2 - название урока, 3 - новости, 4 - класс урока, 5 - время урока
 sessionStorage = {}
 quest = ["Могу ли я вам помочь?","Не хотите услышать новости о школе?", "Чем же?"]
 answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
@@ -190,15 +190,27 @@ def resolve_lessonn(lBuf, lBufAdd, token):
 
     if lBuf != "!!!" :
         if lBufAdd != "!!!" :
-            return timetable.name_to_n_lesson_add(lBuf, lBufAdd, token) - 1
+            return timetable.name_to_n_lesson_add(lBuf, lBufAdd, token) + 1
         else :
-            return timetable.name_to_n_lesson(lBuf, token) - 1 
+            return timetable.name_to_n_lesson(lBuf, token) + 1 
     else :
         return -1
+    
+def make_num(i, tokens, n) :
+    
+    if i < len(tokens) and tokens[i + 1].startswith('урок') :
+        lessonN = 1
+        tokens[i + 1] = '!!!'
+    else :
+        if i > 0 and tokens[i - 1].startswith('урок') :
+            lessonN = 1
+        else :
+            classN = 1
+    continue         
 
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -272,6 +284,10 @@ def get_req_sence(tokens_or):
             reqSence[4] = reqSence[4] + 2
             continue
 
+        if s.startswith('когда') :
+            reqSence[5] = reqSence[5] + 2
+            continue
+
         if s.startswith('понедел') :
             weekday = 0
             continue
@@ -326,33 +342,25 @@ def get_req_sence(tokens_or):
                       
         if s.startswith('физ') or s.startswith('англ') or s.startswith('рус') or s.startswith('бел') or s.startswith('матем')  or s.startswith('хим') or s.startswith('биол') :
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             lessonBuf = s                
             continue         
  
         if s.startswith('язы') or s.startswith('литерат') :
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             lessonBufAdd = s                
             continue                
         
         if s.startswith('1') or s.startswith('перв'):
-            reqSence[2] = reqSence[2] + 2
-            reqSence[4] = reqSence[4] + 2           
+            make_num(i, tokens, 1) 
 
-            if i < len(tokens) and tokens[i + 1].startswith('урок') :
-                lessonN = 1
-                tokens[i + 1] = '!!!'
-            else :
-                if i > 0 and tokens[i - 1].startswith('урок') :
-                    lessonN = 1
-                else :
-                    classN = 1
-            continue         
-        
         if s.startswith('2') or s.startswith('два') or s.startswith('втор') :
             reqSence[2] = reqSence[2] + 2
             reqSence[4] = reqSence[4] + 2           
+            reqSence[5] = reqSence[5] + 2           
 
             if i < len(tokens) and tokens[i + 1].startswith('урок') :
                 lessonN = 2
