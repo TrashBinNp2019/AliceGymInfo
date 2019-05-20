@@ -256,7 +256,7 @@ def get_req_sence(tokens_or):
             reqSence[6] = reqSence[6] + 2
             continue
 
-        if s.startswith('время') :
+        if s.startswith('врем') :
             reqSence[5] = reqSence[5] + 3
             reqSence[6] = reqSence[6] + 2
             reqSence[7] = reqSence[7] + 2
@@ -270,7 +270,7 @@ def get_req_sence(tokens_or):
             reqSence[7] = reqSence[7] + 3
             continue
 
-        if s.startswith('сколько') :
+        if s.startswith('сколь') :
             reqSence[7] = reqSence[7] + 3
             continue
 
@@ -301,8 +301,8 @@ def get_req_sence(tokens_or):
             continue
 
         if s.startswith('когда') :
-            reqSence[5] = reqSence[5] + 2
-            reqSence[6] = reqSence[6] + 2
+            reqSence[5] = reqSence[5] + 3
+            reqSence[6] = reqSence[6] + 3
             continue
 
         if s.startswith('понедел') :
