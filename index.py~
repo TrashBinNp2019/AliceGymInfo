@@ -256,7 +256,7 @@ def get_req_sence(tokens_or):
             reqSence[6] = reqSence[6] + 2
             continue
 
-        if s.startswith('время') :
+        if s.startswith('врем') :
             reqSence[5] = reqSence[5] + 3
             reqSence[6] = reqSence[6] + 2
             reqSence[7] = reqSence[7] + 2
@@ -270,7 +270,7 @@ def get_req_sence(tokens_or):
             reqSence[7] = reqSence[7] + 3
             continue
 
-        if s.startswith('сколько') :
+        if s.startswith('сколь') :
             reqSence[7] = reqSence[7] + 3
             continue
 
@@ -301,8 +301,8 @@ def get_req_sence(tokens_or):
             continue
 
         if s.startswith('когда') :
-            reqSence[5] = reqSence[5] + 2
-            reqSence[6] = reqSence[6] + 2
+            reqSence[5] = reqSence[5] + 3
+            reqSence[6] = reqSence[6] + 3
             continue
 
         if s.startswith('понедел') :
@@ -461,6 +461,7 @@ def get_req_sence(tokens_or):
         if lessonN == -1 or resolve_lessonn(lessonBuf, lessonBufAdd, token) != -1 : # should work idk (f or f = f)
             lessonN = resolve_lessonn(lessonBuf, lessonBufAdd, token) 
         ind = reqSence.index(max(reqSence))
+        return ind #for debug
         if ind == 2 :
             if lessonN != -1 :
                 return timetable.get_lesson_name(token, lessonN)
