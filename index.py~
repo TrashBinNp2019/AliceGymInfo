@@ -475,10 +475,10 @@ def get_req_sence(tokens_or):
                     return timetable.get_lesson_classroom(token, lessonN)
                 else :
                     if ind == 5 :
-                        return timetable.get_lesson_start_time(lessonN)
+                        return timetable.get_lesson_start_time(token, lessonN)
                     else :
                         if ind == 6 :
-                            return timetable.get_lesson_end_time(lessonN)
+                            return timetable.get_lesson_end_time(token, lessonN)
                         else :
                             if ind == 7 :
                                 return '!time' 
