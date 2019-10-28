@@ -58,9 +58,6 @@ def handle_dialog(req, res):
         # Инициализируем сессию и поприветствуем его.
 
         sessionStorage[user_id] = {
-            'suggests': [
-                "Хорошо", "Нет, спасибо", "Ясно", "Больше", 
-            ],
             'quest' : 1
         }
         
