@@ -458,7 +458,7 @@ def get_req_sence(tokens_or):
         if lessonN == -1 or resolve_lessonn(lessonBuf, lessonBufAdd, token) != -1 : # should work idk (f or f = f)
             lessonN = resolve_lessonn(lessonBuf, lessonBufAdd, token) 
         ind = reqSence.index(max(reqSence))
-        return ind #for debug
+        # return ind #for debug
         if ind == 2 :
             if lessonN != -1 :
                 return timetable.get_lesson_name(token, lessonN)
