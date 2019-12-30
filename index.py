@@ -8,6 +8,7 @@ import logging
 import random
 import timetable
 import datetime
+import vlc
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
@@ -195,9 +196,15 @@ def resolve_lessonn(lBuf, lBufAdd, token):
     else :
         return -1
 
+
+def playMusic():
+    p = vlc.MediaPlayer("file:///home/pi/ozone.mp3")
+    p.play
+
+
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -282,6 +289,22 @@ def get_req_sence(tokens_or):
                         
         if s.startswith('каком') :
             reqSence[4] = reqSence[4] + 2
+            continue
+
+        if s.startswith('сыгр') :
+            reqSence[8] = reqSence[8] + 3
+            continue
+
+        if s.startswith('песн') :
+            reqSence[8] = reqSence[8] + 3
+            continue
+
+        if s.startswith('песен') :
+            reqSence[8] = reqSence[8] + 3
+            continue
+
+        if s.startswith('музы') :
+            reqSence[8] = reqSence[8] + 3
             continue
 
         if s.startswith('какие') :
@@ -480,4 +503,8 @@ def get_req_sence(tokens_or):
                             if ind == 7 :
                                 return '!time' 
                             else :
-                                return info[reqSence.index(max(reqSence))]
+                                if ind == 8 :
+                                    playMusic()
+                                    return 'Окей'
+                                else :
+                                    return info[reqSence.index(max(reqSence))]
