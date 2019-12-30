@@ -24,6 +24,7 @@ quest = ["Могу ли я вам помочь?","Не хотите услыша
 answ = ["Я вас слушаю", "1+1=2", "Я вас не понимаю"]
 info = ["Лубинская Татьяна Фаиловна, держу в курсе", "ул. Дружбы 7a"]
 questN = 1
+vers = "1.0.0"
 
 # Задаем параметры приложения Flask.
 @app.route("/", methods=['POST'])
@@ -204,7 +205,7 @@ def playMusic():
 
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -231,7 +232,11 @@ def get_req_sence(tokens_or):
         if s.startswith('имя') :
             reqSence[0] = reqSence[0] + 3
             continue
-        
+
+        if s.startswith('верс'):
+            reqSence[9] = reqSence[9] + 7
+            continue
+
         if s.startswith('новост') :
             reqSence[3] = reqSence[3] + 5
             continue
@@ -503,8 +508,11 @@ def get_req_sence(tokens_or):
                             if ind == 7 :
                                 return '!time' 
                             else :
-                                if ind == 8 :
+                                if ind == 8:
                                     playMusic()
                                     return 'Окей'
-                                else :
-                                    return info[reqSence.index(max(reqSence))]
+                                else:
+                                    if ind == 9 :
+                                        return vers
+                                    else :
+                                        return info[reqSence.index(max(reqSence))]
