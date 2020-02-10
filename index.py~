@@ -205,7 +205,7 @@ def playMusic():
 
 def get_req_sence(tokens_or):
     tokens = tokens_or
-    reqSence = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    reqSence = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     classN = 9
     classL = 2
     weekDay = datetime.datetime.today().weekday()
@@ -233,12 +233,8 @@ def get_req_sence(tokens_or):
             reqSence[0] = reqSence[0] + 3
             continue
 
-        if s.startswith('здравств') :
-            reqSence[10] = reqSence[10] + 5
-            continue
- 
-        if s.startswith('прив') :
-            reqSence[10] = reqSence[10] + 5
+        if s.startswith('верс'):
+            reqSence[9] = reqSence[9] + 7
             continue
 
         if s.startswith('новост') :
@@ -512,14 +508,11 @@ def get_req_sence(tokens_or):
                             if ind == 7 :
                                 return '!time' 
                             else :
-                                if ind == 8 :
+                                if ind == 8:
                                     playMusic()
                                     return 'Окей'
                                 else:
                                     if ind == 9 :
                                         return vers
                                     else :
-                                        if ind == 10 :
-                                            return 'Привет!'
-                                        else :
-                                            return info[reqSence.index(max(reqSence))]
+                                        return info[reqSence.index(max(reqSence))]
